@@ -1,6 +1,7 @@
 {
   "name": "login-with-node",
   "version": "0.0.1",
+  "private": true,
   "description": "Login with NodeJs and React",
   "main": "index.js",
   "engines": {
@@ -13,6 +14,8 @@
   "author": "Thiago Gois <goislimat2@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0"
   }
 }
