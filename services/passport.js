@@ -5,7 +5,6 @@ const keys = require("../config/keys");
 
 const User = mongoose.model("users");
 
-// the user is the one returned by the callback function in the google strategy
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -19,27 +18,20 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      // Credentials to access Google OAuth
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback",
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      // Method that gets accessed when the user successfully logs in
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we already have this user in our db
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
 
-          // first argument it's an error object and the second the result
-          done(null, existingUser);
-        } else {
-          // we don't have this user, create a new record
-          new User({ googleId: profile.id })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+      if (existingUser) {
+        return done(null, existingUser);
+      }
+
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
