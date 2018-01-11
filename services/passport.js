@@ -5,6 +5,17 @@ const keys = require("../config/keys");
 
 const User = mongoose.model("users");
 
+// the user is the one returned by the callback function in the google strategy
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
+  });
+});
+
 passport.use(
   new GoogleStrategy(
     {
