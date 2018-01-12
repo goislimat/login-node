@@ -45,6 +45,12 @@ class App extends React.Component {
               path="/login"
               component={LoginPage}
             />
+            <GuestRoute
+              location={location}
+              exact
+              path="/signup"
+              component={LoginPage}
+            />
             <UserRoute
               location={location}
               exact

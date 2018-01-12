@@ -1,12 +1,11 @@
 import React from "react";
 import { reduxForm } from "redux-form";
-import { Link } from "react-router-dom";
 
-import LoginField from "./Field";
+import SignupField from "./Field";
 
-const LoginForm = () => (
+const SignupForm = () => (
   <form>
-    <LoginField
+    <SignupField
       label="E-mail"
       component="input"
       name="email"
@@ -14,19 +13,23 @@ const LoginForm = () => (
       placeholder="yourfancyemail@provider.com"
     />
 
-    <LoginField
+    <SignupField
       label="Password"
       component="input"
       name="password"
       type="password"
     />
 
+    <SignupField
+      label="Password Confirmation"
+      component="input"
+      name="password_confirmation"
+      type="password"
+    />
+
     <div className="form-group row">
-      <div className="col-md">
-        Not a user yet? <Link to="/signup">Sign up</Link>
-      </div>
       <div className="col-md text-right">
-        <button className="btn btn-secondary">Login</button>
+        <button className="btn btn-secondary">Sign up</button>
       </div>
     </div>
   </form>
@@ -34,4 +37,4 @@ const LoginForm = () => (
 
 export default reduxForm({
   form: "login"
-})(LoginForm);
+})(SignupForm);

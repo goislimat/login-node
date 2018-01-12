@@ -1,7 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import glamorous from "glamorous";
 
 import LoginForm from "./forms/LoginForm";
+import SignupForm from "./forms/SignupForm";
 
 const OAuthButton = glamorous.a(
   {
@@ -24,11 +26,11 @@ const OAuthButton = glamorous.a(
   })
 );
 
-const LoginPage = () => (
+const LoginPage = ({ location: { pathname } }) => (
   <div className="container">
     <div className="row d-flex justify-content-center">
       <div className="col-md-6">
-        <LoginForm />
+        {pathname === "/login" ? <LoginForm /> : <SignupForm />}
 
         <div>
           <OAuthButton backgroundColor=" #4267b2" href="/auth/google">
@@ -44,5 +46,11 @@ const LoginPage = () => (
     </div>
   </div>
 );
+
+LoginPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  }).isRequired
+};
 
 export default LoginPage;
