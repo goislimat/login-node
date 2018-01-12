@@ -1,7 +1,7 @@
 import React from "react";
 
 const LoginPage = () => (
-  <div>
+  <div className="container">
     <a href="/auth/google">Login with Google</a>
   </div>
 );

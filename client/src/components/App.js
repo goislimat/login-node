@@ -1,16 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
+import LandingPage from "./pages/landing";
 import LoginPage from "./pages/auth/LoginPage";
 import { fetchUser } from "../actions/auth";
-
-const Page = () => (
-  <div>
-    Design your page, dude! <Link to="/login">Go to login</Link>
-  </div>
-);
 
 const Dashboard = () => <div>You are logged in!</div>;
 
@@ -25,23 +20,23 @@ class App extends React.Component {
     const { auth } = this.props;
 
     if (!auth.loaded) {
-      return <div>Loading...</div>;
+      return "Loading...";
     }
 
     if (!this.hasUser(auth.user)) {
-      return <div>There is no user logged in!</div>;
+      return "There is no user logged in!";
     }
 
-    return <div>The user {auth.user._id} is logged in!!</div>;
+    return `The user ${auth.user._id} is logged in!!`;
   };
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <BrowserRouter>
           <div>
-            {this.loginStatus()}
-            <Route exact path="/" component={Page} />
+            <div className="text-right">{this.loginStatus()}</div>
+            <Route exact path="/" component={LandingPage} />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/dashboard" component={Dashboard} />
           </div>
