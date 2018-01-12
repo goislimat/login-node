@@ -27,17 +27,18 @@ const OAuthButton = glamorous.a(
 );
 
 const LoginPage = ({ location: { pathname } }) => (
-  <div className="container">
-    <div className="row d-flex justify-content-center">
-      <div className="col-md-6">
+  <div className="container h100">
+    <div className="row d-flex justify-content-center align-items-center h100">
+      <div className="col-md-6 row">
+        <h2 className="col-12 text-center">Your awesome App</h2>
         {pathname === "/login" ? <LoginForm /> : <SignupForm />}
 
-        <div>
+        <div className="col-md-6">
           <OAuthButton backgroundColor=" #4267b2" href="/auth/google">
             Login with Facebook
           </OAuthButton>
         </div>
-        <div>
+        <div className="col-md-6">
           <OAuthButton backgroundColor="#f50005" href="/auth/google">
             Login with Google
           </OAuthButton>

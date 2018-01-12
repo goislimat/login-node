@@ -34,9 +34,9 @@ class App extends React.Component {
   render() {
     const { auth: { loaded }, location } = this.props;
     return (
-      <div className="container-fluid">
+      <div className="container-fluid h100">
         {loaded && (
-          <div className="container">
+          <div className="h100">
             <div className="text-right">{this.loginStatus()}</div>
             <Route location={location} exact path="/" component={LandingPage} />
             <GuestRoute
