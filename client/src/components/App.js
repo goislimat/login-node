@@ -1,13 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
+import UserRoute from "./routes/UserRoute";
+import GuestRoute from "./routes/GuestRoute";
 import LandingPage from "./pages/landing";
 import LoginPage from "./pages/auth/LoginPage";
+import Dashboard from "./pages/dashboard";
 import { fetchUser } from "../actions/auth";
-
-const Dashboard = () => <div>You are logged in!</div>;
 
 class App extends React.Component {
   componentDidMount() {
@@ -17,30 +18,43 @@ class App extends React.Component {
   hasUser = user => Object.keys(user).length !== 0;
 
   loginStatus = () => {
-    const { auth } = this.props;
+    const { loaded, user } = this.props.auth;
 
-    if (!auth.loaded) {
+    if (!loaded) {
       return "Loading...";
     }
 
-    if (!this.hasUser(auth.user)) {
+    if (!this.hasUser(user)) {
       return "There is no user logged in!";
     }
 
-    return `The user ${auth.user._id} is logged in!!`;
+    return `The user ${user._id} is logged in!!`;
   };
 
   render() {
+    const { auth: { loaded }, location } = this.props;
     return (
       <div className="container-fluid">
-        <BrowserRouter>
-          <div>
+        {loaded && (
+          <div className="container">
             <div className="text-right">{this.loginStatus()}</div>
-            <Route exact path="/" component={LandingPage} />
-            <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route location={location} exact path="/" component={LandingPage} />
+            <GuestRoute
+              location={location}
+              exact
+              path="/login"
+              component={LoginPage}
+            />
+            <UserRoute
+              location={location}
+              exact
+              path="/dashboard"
+              component={Dashboard}
+            />
           </div>
-        </BrowserRouter>
+        )}
+
+        {!loaded && "Loading..."}
       </div>
     );
   }
@@ -53,11 +67,17 @@ function mapStateToProps({ auth }) {
 App.propTypes = {
   auth: PropTypes.shape({
     loaded: PropTypes.bool.isRequired,
-    user: PropTypes.shape({
-      _id: PropTypes.string
-    })
+    user: PropTypes.oneOfType([
+      PropTypes.shape({
+        _id: PropTypes.string
+      }),
+      PropTypes.string
+    ])
   }).isRequired,
-  fetchUser: PropTypes.func.isRequired
+  fetchUser: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  }).isRequired
 };
 
 export default connect(mapStateToProps, { fetchUser })(App);

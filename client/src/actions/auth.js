@@ -7,13 +7,14 @@ const userLoggedIn = user => ({
 });
 
 const userLoggedOut = () => ({
-  type: USER_LOGGED_OUT
+  type: USER_LOGGED_OUT,
+  user: ""
 });
 
 export const fetchUser = () => async dispatch => {
   const user = await api.user.login();
 
-  dispatch(userLoggedIn(user.data));
+  dispatch(userLoggedIn(user));
 };
 
 export const logout = () => async dispatch => {
