@@ -29,7 +29,10 @@ module.exports = app => {
   });
 
   app.post("/api/signup", passport.authenticate("local-signup"), (req, res) => {
-    // console.log(req);
+    res.send(req.user);
+  });
+
+  app.post("/api/login", passport.authenticate("local-login"), (req, res) => {
     res.send(req.user);
   });
 };

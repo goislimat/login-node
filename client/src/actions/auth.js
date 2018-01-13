@@ -11,7 +11,13 @@ const userLoggedOut = () => ({
 });
 
 export const fetchUser = () => async dispatch => {
-  const user = await api.user.login();
+  const user = await api.user.googleLogin();
+
+  dispatch(userLoggedIn(user));
+};
+
+export const login = credentials => async dispatch => {
+  const user = await api.user.login(credentials);
 
   dispatch(userLoggedIn(user));
 };

@@ -42,10 +42,9 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password",
-      passReqToCallback: true
+      passwordField: "password"
     },
-    async (req, email, password, done) => {
+    async (email, password, done) => {
       const user = await User.findOne({ email: email });
 
       if (user) {
@@ -57,11 +56,32 @@ passport.use(
 
       const newUser = new User();
       newUser.password = await newUser.generateHash(password);
-      console.log(newUser.password);
       newUser.email = email;
 
       await newUser.save();
       done(null, newUser);
+    }
+  )
+);
+
+passport.use(
+  "local-login",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password"
+    },
+    async (email, password, done) => {
+      const user = await User.findOne({ email: email });
+
+      if (user) {
+        if (!await user.validPassword(password)) {
+          return done(null, false);
+        }
+        return done(null, user);
+      }
+
+      return done(null, false);
     }
   )
 );
