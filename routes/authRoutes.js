@@ -27,4 +27,9 @@ module.exports = app => {
   app.get("/api/current_user", (req, res) => {
     res.send(req.user);
   });
+
+  app.post("/api/signup", passport.authenticate("local-signup"), (req, res) => {
+    // console.log(req);
+    res.send(req.user);
+  });
 };

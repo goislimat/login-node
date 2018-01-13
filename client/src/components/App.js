@@ -73,12 +73,9 @@ function mapStateToProps({ auth }) {
 App.propTypes = {
   auth: PropTypes.shape({
     loaded: PropTypes.bool.isRequired,
-    user: PropTypes.oneOfType([
-      PropTypes.shape({
-        _id: PropTypes.string
-      }),
-      PropTypes.string
-    ])
+    user: PropTypes.shape({
+      _id: PropTypes.string
+    })
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
   location: PropTypes.shape({

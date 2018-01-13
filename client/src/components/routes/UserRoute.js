@@ -13,7 +13,7 @@ const UserRoute = ({ isAuthenticated, component: Component, ...rest }) => (
 );
 
 function mapStateToProps({ auth }) {
-  return { isAuthenticated: !!auth.user };
+  return { isAuthenticated: Object.keys(auth.user).length !== 0 };
 }
 
 UserRoute.propTypes = {
