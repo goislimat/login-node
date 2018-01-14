@@ -47,11 +47,23 @@ class SignupForm extends React.Component {
     try {
       await this.props.signup(data);
     } catch (e) {
-      const err = {
-        present: true,
-        status: e.response.status,
-        message: "This user is already taken!"
-      };
+      const { status } = e.response;
+      let err = {};
+
+      if (status === 500) {
+        err = {
+          present: true,
+          status,
+          message:
+            "The server had an unespected behavior. Contact the support for more info."
+        };
+      } else {
+        err = {
+          present: true,
+          status,
+          message: "This user is already taken!"
+        };
+      }
 
       this.setState({ serverError: err });
     }

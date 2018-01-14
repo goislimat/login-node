@@ -48,11 +48,23 @@ class LoginForm extends React.Component {
     try {
       await this.props.login(data);
     } catch (e) {
-      const err = {
-        present: true,
-        status: e.response.status,
-        message: "E-mail and password combination is not valid!"
-      };
+      const { status } = e.response;
+      let err = {};
+
+      if (status === 500) {
+        err = {
+          present: true,
+          status,
+          message:
+            "The server had an unespected behavior. Contact the support for more info."
+        };
+      } else {
+        err = {
+          present: true,
+          status,
+          message: "E-mail and password combination is not valid!"
+        };
+      }
 
       this.setState({ serverError: err });
     }

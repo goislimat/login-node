@@ -19,29 +19,12 @@ class App extends React.Component {
     this.props.fetchUser();
   }
 
-  hasUser = user => Object.keys(user).length !== 0;
-
-  loginStatus = () => {
-    const { loaded, user } = this.props.auth;
-
-    if (!loaded) {
-      return "Loading...";
-    }
-
-    if (!this.hasUser(user)) {
-      return "There is no user logged in!";
-    }
-
-    return `The user ${user._id} is logged in!!`;
-  };
-
   render() {
     const { auth: { loaded } } = this.props;
     return (
       <div className="container-fluid h100">
         {loaded && (
           <div className="h100">
-            <div className="text-right">{this.loginStatus()}</div>
             <Switch>
               <Route exact path="/" component={LandingPage} />
               <GuestRoute exact path="/auth/login" component={LoginPage} />
@@ -64,10 +47,7 @@ function mapStateToProps({ auth }) {
 
 App.propTypes = {
   auth: PropTypes.shape({
-    loaded: PropTypes.bool.isRequired,
-    user: PropTypes.shape({
-      _id: PropTypes.string
-    })
+    loaded: PropTypes.bool.isRequired
   }).isRequired,
   fetchUser: PropTypes.func.isRequired
 };

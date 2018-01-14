@@ -41,6 +41,7 @@ passport.use(
         name: `${profile.name.givenName} ${profile.name.familyName}`,
         photo: profile.photos[0].value
       }).save();
+
       done(null, newUser);
     }
   )
@@ -84,10 +85,10 @@ passport.use(
       const user = await User.findOne({ email: email });
 
       if (user) {
-        if (!await user.validPassword(password)) {
-          return done(null, false, { message: "This user is already taken" });
+        if (await user.validPassword(password)) {
+          return done(null, user);
         }
-        return done(null, user);
+        return done(null, false, { message: "This user is already taken" });
       }
 
       const newUser = new User();
@@ -99,7 +100,12 @@ passport.use(
       newUser.photo = `https://www.gravatar.com/avatar/${md5(formattedEmail)}`;
 
       await newUser.save();
-      done(null, newUser);
+
+      const allowedUserInfo = await User.findOne({ email: email })
+        .select("-password")
+        .exec();
+
+      done(null, allowedUserInfo);
     }
   )
 );
@@ -114,11 +120,12 @@ passport.use(
     async (email, password, done) => {
       const user = await User.findOne({ email: email });
 
-      if (user) {
-        if (!await user.validPassword(password)) {
-          return done(null, false);
-        }
-        return done(null, user);
+      if (user && (await user.validPassword(password))) {
+        const allowedUserInfo = await User.findOne({ email: email })
+          .select("-password")
+          .exec();
+
+        return done(null, allowedUserInfo);
       }
 
       return done(null, false);

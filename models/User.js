@@ -3,6 +3,16 @@ const bcrypt = require("bcrypt");
 
 const { Schema } = mongoose;
 
+const replacer = (obj, keys) => {
+  let dup = {};
+  for (key in obj) {
+    if (keys.indexOf(key) == -1) {
+      dup[key] = obj[key];
+    }
+  }
+  return dup;
+};
+
 const userSchema = new Schema({
   email: { type: String, lowercase: true, index: true },
   facebookId: String,
@@ -21,6 +31,10 @@ userSchema.methods.generateHash = async function(password) {
 userSchema.methods.validPassword = async function(password) {
   const res = await bcrypt.compare(password, this.password);
   return res;
+};
+
+userSchema.methods.toAuthJson = function() {
+  return replacer(this, ["password"]);
 };
 
 mongoose.model("users", userSchema);
