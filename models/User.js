@@ -7,6 +7,7 @@ const userSchema = new Schema({
   email: { type: String, lowercase: true, index: true },
   facebookId: String,
   googleId: String,
+  loginMethod: String,
   name: String,
   photo: String,
   password: String

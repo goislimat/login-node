@@ -70,6 +70,13 @@ class SignupForm extends React.Component {
         )}
         <form onSubmit={handleSubmit(this.formSubmit)}>
           <SignupField
+            label="Name"
+            name="name"
+            type="text"
+            placeholder="Jhon Doe"
+          />
+
+          <SignupField
             label="E-mail"
             name="email"
             type="email"
