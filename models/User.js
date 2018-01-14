@@ -3,15 +3,8 @@ const bcrypt = require("bcrypt");
 
 const { Schema } = mongoose;
 
-const replacer = (obj, keys) => {
-  let dup = {};
-  for (key in obj) {
-    if (keys.indexOf(key) == -1) {
-      dup[key] = obj[key];
-    }
-  }
-  return dup;
-};
+// Generate a random between 8 and 12
+const generateSalt = () => Math.floor(Math.random() * 5) + 8;
 
 const userSchema = new Schema({
   email: { type: String, lowercase: true, index: true },
@@ -24,7 +17,7 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.generateHash = async function(password) {
-  const hash = await bcrypt.hash(password, 10);
+  const hash = await bcrypt.hash(password, generateSalt());
   return hash;
 };
 

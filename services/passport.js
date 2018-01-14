@@ -101,11 +101,9 @@ passport.use(
 
       await newUser.save();
 
-      const allowedUserInfo = await User.findOne({ email: email })
-        .select("-password")
-        .exec();
+      newUser.password = undefined;
 
-      done(null, allowedUserInfo);
+      done(null, newUser);
     }
   )
 );
@@ -121,11 +119,9 @@ passport.use(
       const user = await User.findOne({ email: email });
 
       if (user && (await user.validPassword(password))) {
-        const allowedUserInfo = await User.findOne({ email: email })
-          .select("-password")
-          .exec();
+        user.password = undefined;
 
-        return done(null, allowedUserInfo);
+        return done(null, user);
       }
 
       return done(null, false);
