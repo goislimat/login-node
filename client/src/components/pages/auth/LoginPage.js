@@ -34,7 +34,7 @@ const LoginPage = ({ location: { pathname } }) => (
         {pathname === "/login" ? <LoginForm /> : <SignupForm />}
 
         <div className="col-md-6">
-          <OAuthButton backgroundColor=" #4267b2" href="/auth/google">
+          <OAuthButton backgroundColor=" #4267b2" href="/auth/facebook">
             Login with Facebook
           </OAuthButton>
         </div>

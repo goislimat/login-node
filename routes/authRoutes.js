@@ -1,7 +1,7 @@
 const passport = require("passport");
 
 module.exports = app => {
-  // Route called when the user tries to authenticate
+  // Route called when the user tries to authenticate with Google
   app.get(
     "/auth/google",
     passport.authenticate("google", {
@@ -9,10 +9,25 @@ module.exports = app => {
     })
   );
 
-  // Route called when the user is redirected
+  // Route called when the user is redirected from Google
   app.get(
     "/auth/google/callback",
     passport.authenticate("google"),
+    (req, res) => {
+      res.redirect("/dashboard");
+    }
+  );
+
+  // Route called when the user tries to authenticate with Facebook
+  app.get(
+    "/auth/facebook",
+    passport.authenticate("facebook", { scope: ["email"] })
+  );
+
+  // Route called when the user is redirected from Facebook
+  app.get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook"),
     (req, res) => {
       res.redirect("/dashboard");
     }
