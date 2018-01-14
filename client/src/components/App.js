@@ -1,13 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-import UserRoute from "./routes/UserRoute";
 import GuestRoute from "./routes/GuestRoute";
+import UserRoute from "./routes/UserRoute";
+
+import DashboardPage from "./pages/dashboard";
 import LandingPage from "./pages/landing";
 import LoginPage from "./pages/auth/LoginPage";
-import Dashboard from "./pages/dashboard";
+import NotFoundPage from "./pages/notFound";
+import SignupPage from "./pages/auth/SignupPage";
+
 import { fetchUser } from "../actions/auth";
 
 class App extends React.Component {
@@ -32,31 +36,19 @@ class App extends React.Component {
   };
 
   render() {
-    const { auth: { loaded }, location } = this.props;
+    const { auth: { loaded } } = this.props;
     return (
       <div className="container-fluid h100">
         {loaded && (
           <div className="h100">
             <div className="text-right">{this.loginStatus()}</div>
-            <Route location={location} exact path="/" component={LandingPage} />
-            <GuestRoute
-              location={location}
-              exact
-              path="/login"
-              component={LoginPage}
-            />
-            <GuestRoute
-              location={location}
-              exact
-              path="/signup"
-              component={LoginPage}
-            />
-            <UserRoute
-              location={location}
-              exact
-              path="/dashboard"
-              component={Dashboard}
-            />
+            <Switch>
+              <Route exact path="/" component={LandingPage} />
+              <GuestRoute exact path="/auth/login" component={LoginPage} />
+              <GuestRoute exact path="/auth/signup" component={SignupPage} />
+              <UserRoute exact path="/dashboard" component={DashboardPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
           </div>
         )}
 
@@ -77,10 +69,7 @@ App.propTypes = {
       _id: PropTypes.string
     })
   }).isRequired,
-  fetchUser: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string
-  }).isRequired
+  fetchUser: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, { fetchUser })(App);

@@ -93,7 +93,7 @@ class SignupForm extends React.Component {
 
           <div className="form-group row">
             <div className="col-md">
-              Already have an account? <Link to="/login">Log in</Link>
+              Already have an account? <Link to="/auth/login">Log in</Link>
             </div>
             <div className="col-md text-right">
               <button disabled={invalid} className="btn btn-secondary">

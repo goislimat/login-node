@@ -5,7 +5,7 @@ const LandingPage = () => (
   <div className="container">
     <h1>Design your Landing Page, dude!</h1>
     <div>
-      <Link to="/login">Go to Login Page</Link>
+      <Link to="/auth/login">Go to Login Page</Link>
     </div>
   </div>
 );
