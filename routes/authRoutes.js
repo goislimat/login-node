@@ -1,5 +1,9 @@
 const passport = require("passport");
 
+const localOptions = {
+  badRequestMessage: "E-mail/Password cant't be blank"
+};
+
 module.exports = app => {
   // Route called when the user tries to authenticate with Google
   app.get(
@@ -44,7 +48,7 @@ module.exports = app => {
   });
 
   app.post("/api/signup", (req, res, next) => {
-    passport.authenticate("local-signup", (err, user, info) => {
+    passport.authenticate("local-signup", localOptions, (err, user, info) => {
       if (err) return next(err);
 
       if (!user) return res.send({ user, info });
@@ -58,7 +62,7 @@ module.exports = app => {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local-login", (err, user, info) => {
+    passport.authenticate("local-login", localOptions, (err, user, info) => {
       if (err) return next(err);
 
       if (!user) return res.send({ user, info });

@@ -4,6 +4,7 @@ const md5 = require("md5");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
+const isEmail = require("validator/lib/isEmail");
 
 const User = mongoose.model("users");
 
@@ -74,6 +75,14 @@ passport.use(
   )
 );
 
+const errors = (email, password) => {
+  if (!isEmail(email)) return "This is not a valid e-mail";
+
+  if (password.length < 8) return "Password should have at least 8 characters";
+
+  return false;
+};
+
 passport.use(
   "local-signup",
   new LocalStrategy(
@@ -83,6 +92,9 @@ passport.use(
       passReqToCallback: true
     },
     async (req, email, password, done) => {
+      const err = errors(email, password);
+      if (err) return done(null, false, { message: err });
+
       try {
         const user = await User.findOne({ email: email });
 
@@ -119,6 +131,9 @@ passport.use(
       passwordField: "password"
     },
     async (email, password, done) => {
+      const err = errors(email, password);
+      if (err) return done(null, false, { message: err });
+
       try {
         const user = await User.findOne({ email: email });
 
@@ -128,7 +143,7 @@ passport.use(
         }
 
         return done(null, false, {
-          message: "This username/password combination is not valid!"
+          message: "Invalid email/password combination"
         });
       } catch (err) {
         return done(err);
