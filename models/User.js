@@ -26,8 +26,4 @@ userSchema.methods.validPassword = async function(password) {
   return res;
 };
 
-userSchema.methods.toAuthJson = function() {
-  return replacer(this, ["password"]);
-};
-
 mongoose.model("users", userSchema);

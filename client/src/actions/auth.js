@@ -16,10 +16,11 @@ export const fetchUser = () => async dispatch => {
   dispatch(userLoggedIn(user));
 };
 
-export const login = credentials => async dispatch => {
-  const user = await api.user.login(credentials);
+export const login = (credentials, cb) => async dispatch => {
+  const res = await api.user.login(credentials);
 
-  dispatch(userLoggedIn(user));
+  dispatch(userLoggedIn(res.user));
+  cb(res.info);
 };
 
 export const logout = () => async dispatch => {
@@ -28,8 +29,9 @@ export const logout = () => async dispatch => {
   dispatch(userLoggedOut());
 };
 
-export const signup = credentials => async dispatch => {
-  const user = await api.user.signup(credentials);
+export const signup = (credentials, cb) => async dispatch => {
+  const res = await api.user.signup(credentials);
 
-  dispatch(userLoggedIn(user));
+  dispatch(userLoggedIn(res.user));
+  cb(res.info);
 };

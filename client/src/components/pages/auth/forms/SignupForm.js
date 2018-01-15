@@ -45,27 +45,26 @@ class SignupForm extends React.Component {
 
   formSubmit = async data => {
     try {
-      await this.props.signup(data);
-    } catch (e) {
-      const { status } = e.response;
-      let err = {};
+      await this.props.signup(data, err => {
+        if (err) {
+          const e = {
+            present: true,
+            status: 401,
+            message: err.message
+          };
 
-      if (status === 500) {
-        err = {
-          present: true,
-          status,
-          message:
-            "The server had an unespected behavior. Contact the support for more info."
-        };
-      } else {
-        err = {
-          present: true,
-          status,
-          message: "This user is already taken!"
-        };
-      }
+          this.setState({ serverError: e });
+        }
+      });
+    } catch (err) {
+      const e = {
+        present: true,
+        status: err.response.status,
+        message:
+          "The server had an unespected behavior. Contact the support for more info."
+      };
 
-      this.setState({ serverError: err });
+      this.setState({ serverError: e });
     }
   };
 
