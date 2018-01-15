@@ -1,41 +1,61 @@
 import React from "react";
 import glamorous from "glamorous";
 
-const OAuthLink = glamorous.a(
+// Defaults to Facebook params
+const OAuthLink = glamorous.div(
+  "col text-center",
   {
+    backgroundColor: "#4267b2",
     color: "#fff",
-    display: "block",
+    cursor: "pointer",
     fontWeight: "bolder",
-    marginTop: "20px",
-    padding: "15px 0",
-    textAlign: "center",
-    width: "100%",
-    transition: "filter 0.5s",
+    margin: "20px 10px",
+    padding: "10px 15px",
+    transition: "all .5s",
     ":hover": {
-      textDecoration: "none",
-      color: "#fff",
       filter: "saturate(70%)"
+    },
+    "& i": {
+      fontSize: "1.2em"
+    },
+    "& a, & a:hover": {
+      color: "#fff",
+      textDecoration: "none"
     }
   },
-  ({ backgroundColor }) => ({
-    backgroundColor
+  ({ backgroundColor, color }) => ({
+    backgroundColor,
+    color,
+    "& a, & a:hover": {
+      color
+    }
   })
 );
 
 const FacebookOAuthButton = text => (
-  <div className="col-md-6">
-    <OAuthLink backgroundColor="#4267b2" href="/auth/facebook">
-      {text} with Facebook
-    </OAuthLink>
-  </div>
+  <OAuthLink>
+    <div className="row">
+      <div className="col-auto">
+        <i className="fa fa-facebook-official" aria-hidden="true" />
+      </div>
+      <div className="col">
+        <a href="/auth/facebook">{text} with Facebook</a>
+      </div>
+    </div>
+  </OAuthLink>
 );
 
 const GoogleOAuthButton = text => (
-  <div className="col-md-6">
-    <OAuthLink backgroundColor="#f50005" href="/auth/google">
-      {text} with Google
-    </OAuthLink>
-  </div>
+  <OAuthLink backgroundColor="#fff" color="#f50005" className="border">
+    <div className="row">
+      <div className="col-auto">
+        <i className="fa fa-google" aria-hidden="true" />
+      </div>
+      <div className="col">
+        <a href="/auth/google">{text} with Google</a>
+      </div>
+    </div>
+  </OAuthLink>
 );
 
 const OAuthButton = ({ text, type }) => {
