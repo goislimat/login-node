@@ -51,7 +51,7 @@ module.exports = app => {
     passport.authenticate("local-signup", localOptions, (err, user, info) => {
       if (err) return next(err);
 
-      if (!user) return res.send({ user, info });
+      if (!user) return res.status(400).send({ user, info });
 
       req.logIn(user, err => {
         if (err) return next(err);
@@ -65,7 +65,7 @@ module.exports = app => {
     passport.authenticate("local-login", localOptions, (err, user, info) => {
       if (err) return next(err);
 
-      if (!user) return res.send({ user, info });
+      if (!user) return res.status(400).send({ user, info });
 
       req.logIn(user, err => {
         if (err) return next(err);

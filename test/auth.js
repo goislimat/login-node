@@ -17,7 +17,7 @@ describe("Auth", () => {
     });
   });
 
-  describe("POST to login an inexiting user", () => {
+  describe("POST to login an inexisting user", () => {
     it("should try to login", done => {
       const credentials = {
         email: "goislimat@gmail.com",
@@ -29,7 +29,7 @@ describe("Auth", () => {
         .post("/api/login")
         .send(credentials)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an("object");
           res.body.user.should.be.false;
           res.body.info.message.should.equal(
@@ -52,7 +52,7 @@ describe("Auth", () => {
         .post("/api/signup")
         .send(credentials)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an("object");
           res.body.user.should.be.false;
           res.body.info.message.should.equal("E-mail/Password cant't be blank");
@@ -71,7 +71,7 @@ describe("Auth", () => {
         .post("/api/signup")
         .send(credentials)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an("object");
           res.body.user.should.be.false;
           res.body.info.message.should.equal("E-mail/Password cant't be blank");
@@ -90,7 +90,7 @@ describe("Auth", () => {
         .post("/api/signup")
         .send(credentials)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an("object");
           res.body.user.should.be.false;
           res.body.info.message.should.equal("This is not a valid e-mail");
@@ -109,7 +109,7 @@ describe("Auth", () => {
         .post("/api/signup")
         .send(credentials)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an("object");
           res.body.user.should.be.false;
           res.body.info.message.should.equal(
