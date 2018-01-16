@@ -29,57 +29,32 @@ const validate = values => {
 };
 
 class LoginForm extends React.Component {
-  state = {
-    serverError: {
-      present: false,
-      status: -1,
-      message: ""
-    }
-  };
+  formSubmit = data => this.props.login(data);
 
-  formSubmit = async data => {
-    this.setState(prevState => ({
-      serverError: {
-        ...prevState.serverError,
-        present: false
-      }
-    }));
-
-    try {
-      await this.props.login(data, err => {
-        if (err) {
-          const e = {
-            present: true,
-            status: 401,
-            message: err.message
-          };
-
-          this.setState({ serverError: e });
-        }
-      });
-    } catch (err) {
-      const e = {
-        present: true,
-        status: err.response.status,
-        message:
-          "The server had an unespected behavior. Contact the support for more info."
-      };
-
-      this.setState({ serverError: e });
-    }
-  };
+  renderFlashMessage = message => (
+    <div
+      className="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      {message}
+      <button
+        type="button"
+        className="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  );
 
   render() {
-    const { handleSubmit, invalid } = this.props;
-    const { serverError: { present, message } } = this.state;
+    const { handleSubmit, invalid, flashMessage } = this.props;
 
     return (
       <div className="col-12">
-        {present && (
-          <div className="alert alert-danger text-center" role="alert">
-            {message}
-          </div>
-        )}
+        {flashMessage && this.renderFlashMessage(flashMessage)}
+
         <form onSubmit={handleSubmit(this.formSubmit)}>
           <LoginField
             label="E-mail"
@@ -106,7 +81,12 @@ class LoginForm extends React.Component {
   }
 }
 
+function mapStateToProps({ flashMessage }) {
+  return { flashMessage };
+}
+
 LoginForm.propTypes = {
+  flashMessage: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired
@@ -115,4 +95,4 @@ LoginForm.propTypes = {
 export default reduxForm({
   form: "login",
   validate
-})(connect(null, { login })(LoginForm));
+})(connect(mapStateToProps, { login })(LoginForm));

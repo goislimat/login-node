@@ -35,50 +35,32 @@ const validate = values => {
 };
 
 class SignupForm extends React.Component {
-  state = {
-    serverError: {
-      present: false,
-      status: -1,
-      message: ""
-    }
-  };
+  formSubmit = data => this.props.signup(data);
 
-  formSubmit = async data => {
-    try {
-      await this.props.signup(data, err => {
-        if (err) {
-          const e = {
-            present: true,
-            status: 401,
-            message: err.message
-          };
-
-          this.setState({ serverError: e });
-        }
-      });
-    } catch (err) {
-      const e = {
-        present: true,
-        status: err.response.status,
-        message:
-          "The server had an unespected behavior. Contact the support for more info."
-      };
-
-      this.setState({ serverError: e });
-    }
-  };
+  renderFlashMessage = message => (
+    <div
+      className="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      {message}
+      <button
+        type="button"
+        className="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  );
 
   render() {
-    const { handleSubmit, invalid } = this.props;
-    const { serverError: { present, message } } = this.state;
+    const { handleSubmit, invalid, flashMessage } = this.props;
 
     return (
       <div className="col-12">
-        {present && (
-          <div className="alert alert-danger text-center" role="alert">
-            {message}
-          </div>
-        )}
+        {flashMessage && this.renderFlashMessage(flashMessage)}
+
         <form onSubmit={handleSubmit(this.formSubmit)}>
           <SignupField
             label="Name"
@@ -118,7 +100,12 @@ class SignupForm extends React.Component {
   }
 }
 
+function mapStateToProps({ flashMessage }) {
+  return { flashMessage };
+}
+
 SignupForm.propTypes = {
+  flashMessage: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool.isRequired,
   signup: PropTypes.func.isRequired
@@ -127,4 +114,4 @@ SignupForm.propTypes = {
 export default reduxForm({
   form: "login",
   validate
-})(connect(null, { signup })(SignupForm));
+})(connect(mapStateToProps, { signup })(SignupForm));

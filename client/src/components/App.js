@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 
+import "bootstrap/dist/js/bootstrap.min";
+
 import GuestRoute from "./routes/GuestRoute";
 import UserRoute from "./routes/UserRoute";
 
